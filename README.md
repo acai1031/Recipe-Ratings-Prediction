@@ -6,13 +6,13 @@ by Kristina Wu and Yishan Cai
 
 ## Framing the Problem
 ### Overview
-Recipe ratings on culinary websites like Food.com play a crucial role in shaping consumer preferences and culinary trends. High-rated recipes often set benchmarks for quality and taste, influencing what people choose to cook and eat. These ratings, ranging from 1 to 5, offer a more granular view of user satisfaction and preferences. Analyzing the factors that contribute to a recipe's rating is not only beneficial for cooking enthusiasts and chefs but also for the culinary industry as a whole.<br>
+Recipe ratings on culinary websites like [Food.com](https://www.food.com/recipe/chickpea-and-fresh-tomato-toss-51631) play a crucial role in shaping consumer preferences and culinary trends. High-rated recipes often set benchmarks for quality and taste, influencing what people choose to cook and eat. These ratings, ranging from 1 to 5, offer a more granular view of user satisfaction and preferences. Analyzing the factors that contribute to a recipe's rating is not only beneficial for cooking enthusiasts and chefs but also for the culinary industry as a whole.<br>
 
 The characteristics of a recipe, such as the number of ingredients and calorie amount, can offer deep insights into its popularity and acceptance among users. Different eating style might have varied trends; for instance, some people with health-awareness might favor recipes with diverse ingredients or lower calories. Understanding these preferences is key to predicting the success of a recipe in terms of its rating.<br>
 
 By predicting the rating of a recipe, we can acquire a nuanced understanding of consumer preferences in different culinary segments. This predictive analysis can help identify which recipes are likely to be well-received and why, based on their inherent features. Such insights are invaluable for food bloggers, recipe developers, and culinary websites in tailoring their content to meet user expectations.<br>
 
-To achieve accurate predictions, we will analyze historical data from [Food.com](https://www.food.com/recipe/chickpea-and-fresh-tomato-toss-51631), focusing on recipes and their ratings 2008-2018. We especially pay attention on reviews which might have positive correlation to the rate that users post. Going through those reviews, we can figure out some signal words that indicate the positive, negative, or neutral property of users’ opinion on a specific recipe. <br>
+To achieve accurate predictions, we will analyze historical data from Food.com, focusing on recipes and their ratings 2008-2018. We especially pay attention on reviews which might have positive correlation to the rate that users post. Going through those reviews, we can figure out some signal words that indicate the positive, negative, or neutral property of users’ opinion on a specific recipe. <br>
 This dataset also includes diverse features like the number of ingredients, calorie count, saturated fat, sodium, protein, carbohydrates and so on. By exploring these dimensions, we aim to uncover patterns and correlations that influence a recipe’s rating.<br>
 
 **Notes**:  At the time of prediction, we would have access to the all features mentioned above for recipe rating prediction problem. We would not have any future information beyond what is available in the dataset.<br>
@@ -28,13 +28,13 @@ In this project, we have selected the `rating` of a recipe as the response varia
 ### Evaluation Metrics
 For our classification model, we could assess its performance using metrics such as accuracy, F1 score, precision, or recall. Given our focus on health-conscious trends in recipe ratings, precision will be our key metric. Besides, we will also track the F1 score to confirm whether our prediction model is even.<br>
 
-**Justification**
+**Justification**<br>
 The choice of metrics reflects our goal to accurately identify recipes that align with calories amount and number of ingredients profiles. Precision is crucial as it minimizes the risk of incorrectly identifying a lower-quality recipe as high-quality, which is vital in the context of recommending health-conscious recipes to users. Moreover, the F1 score is chosen over accuracy as a more relevant metric due to its balanced focus on precision and recall. This metric is particularly useful when we need to strike a balance between the precision of our model and its ability to recall or identify all relevant instances of high-rated recipes. The F1 score is critical in scenarios where both the false positives and false negatives are of concern, ensuring that our model not only accurately identifies high-quality recipes but also doesn't miss out on any potential recipes that could meet our users' health-conscious standards.<br>
 
 ### About Data Cleaning
 Our exploratory data analysis on this dataset can be found [here](https://acai1031.github.io/-Recipes-Research-Project/)<br>
 
-Except the data cleaning steps we took above, this time we use a different techinue to handle missing value of `rating` and `review`. We notice that if the user neither leave a review nor a rating, then both of them will be filled with np.nan, while if the user leave a review without rating, the rating will be 0. Following this observation, we firstly fill all ratings of 0 with np.nan, then drop all rows that contains np.nan in review or np.nan in ratings, because we believe the missingness of these two variables might due to random chance.<br>
+Except the data cleaning steps we took above, this time we use a different technique to handle missing value of `rating` and `review`. We notice that if the user neither leave a review nor a rating, then both of them will be filled with np.nan, while if the user leave a review without rating, the rating will be 0. Following this observation, we firstly fill all ratings of 0 with np.nan, then drop all rows that contains np.nan in review or np.nan in ratings, because we believe the missingness of these two variables might due to random chance.<br>
 
 ---
 
@@ -56,11 +56,11 @@ For `calories`, according to the wide-spread and uniformative attribute of this 
 And finally, the model use StandardScaler to normalize both features to avoid inconvience resulted from the inconsistency of calories units and n_ingredients units.<br>
 
 ### Performance
-The model achieved a training precision of 0.818 and a testing precision of 0.657. The F1-scores for the model are 0.819 and 0.674, respectively. Based on the precision and F1-score performance metrics, the current model can be considered good. **need further explanation here!!!**<br>
+The model achieved a training precision of 0.818 and a testing precision of 0.657. The F1-scores for the model are 0.819 and 0.674, respectively. Based on the precision and F1-score performance metrics, we may say that the current model is not good enough. The model demonstrates a high level of precision on the training data, particularly important when predicting recipe ratings. Although the testing precision is slightly lower than the training precision, it remains at a reasonably high level. The model maintains its ability to make accurate positive predictions on unseen data. The noticeable difference between training and testing precision (0.818 vs. 0.657) suggests a potential overfitting issue. <br>
 
-<iframe src="assets/confusion_matrix.html" width=900 height=600 frameBorder=0></iframe> <br>
+The values within confusion matrix shown below provide a detailed breakdown of the model’s predictions, allowing for a deeper analysis of its performance. We find that the existing model lacks effectiveness as it is consistently predicting a 5-star rating. This behavior is likely attributed to the significant imbalance in the dataset. If the training data is imbalanced, meaning there is a significant difference in the number of observations between different ratings, the model may prioritize the majority class which is 5-star rating and struggle to generalize to minority classes.<br>
 
-The values within confusion matrix shown above provide a detailed breakdown of the model’s predictions, allowing for a deeper analysis of its performance.<br>
+<iframe src="assets/confusion_matrix.html" width=900 height=600 frameBorder=0></iframe>
 
 ---
 
