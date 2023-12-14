@@ -35,8 +35,8 @@ The choice of metrics reflects our goal to accurately identify recipes that alig
 Our exploratory data analysis on this dataset can be found [here](https://acai1031.github.io/-Recipes-Research-Project/)<br>
 
 Except the data cleaning steps we took above, we have two more modification.<br>
-Firstly, we use a different technique to handle missing value of `rating` and `review`. We notice that if the user neither leave a review nor a rating, then both of them will be filled with np.nan, while if the user leave a review without rating, the rating will be 0. Following this observation, we firstly fill all ratings of 0 with np.nan, then drop all rows that contains np.nan in review or np.nan in ratings, because we believe the missingness of these two variables might due to random chance.<br>
-Moreover, in order to better represent the user attitude towards recipe, We transform the `review` into a column `sentiment` labeled with 'negative', 'neutral', and 'positive'. 
+1. We use a different technique to handle missing value of `rating` and `review`. We notice that if the user neither leave a review nor a rating, then both of them will be filled with np.nan, while if the user leave a review without rating, the rating will be 0. Following this observation, we firstly fill all ratings of 0 with np.nan, then drop all rows that contains np.nan in review or np.nan in ratings, because we believe the missingness of these two variables might due to random chance.<br>
+2. In order to better represent the user attitude towards recipe, We transform the `review` into a column `sentiment` labeled with 'negative', 'neutral', and 'positive'. 
 
 ---
 
@@ -68,12 +68,25 @@ The values within confusion matrix shown below provide a detailed breakdown of t
 
 ## Final Model
 ### Model Choosing 
-After performing multiple experiments, we have opted for the Random Forest Classifier as our chosen model for two primary reasons. Firstly, while the Decision Tree model serves well as a baseline, its performance lacks consistency and stability when compared to alternative models. This inconsistency poses challenges for us in the effective fine-tuning of the final model. Secondly, the Random Forest, being an ensemble model composed of multiple decision trees, provides aggregated predictions that assist in addressing the influence of imbalanced `rating` in our dataset. This characteristic suggests that this classifier is a more favorable choice. Here are the selected features for our model:
+After performing multiple experiments, we have opted for the Random Forest Classifier as our chosen model for two primary reasons. Firstly, while the Decision Tree model serves well as a baseline, its performance lacks consistency and stability when compared to alternative models. This inconsistency poses challenges for us in the effective fine-tuning of the final model. Secondly, the Random Forest, being an ensemble model composed of multiple decision trees, provides aggregated predictions that assist in addressing the influence of imbalanced `rating` in our dataset. This characteristic suggests that this classifier is a more favorable choice. <br>
 
 ### Feature Transformations
+Besides the features we used in baseline model, here are the additional selected features for our model:
+- `categorical_sentiment`: This feature is transformed using `OneHotEncoding`. It provides valuable information about the user attitude towards a recipe, as different sentiment categories can have distinct patterns or effects on the predicted rating of recipe. 
+- `quantile_avg_rating`: This is a continuout quantitative variable, and we use `QuantileTransformer` to transform this feature to follow a uniform distribution. This feature represents the average rating of recipes. It may be relevant for predicting the rating of recipe, as it represents some characteristic of the recipe and smooth the effect of outliers on overall rating. 
+- `standardize_nutrition`: These three features `saturated fat`, `protein`, `carbohydrates` are scaled by `StandardScaler`. These features represent the nutrition content of the recipe. Scaling is applied for units consistency and to prevent dominance by features with larger values. There appear to be a connection between nutritions and the ratings. This aligns with intuition – individuals tend to favor foods with carbohydrates for a boost in happiness and satisfaction. Additionally, saturated fat and protein are essential nutrients in our diet, and people may express higher ratings for foods containing these nutrients.
+<br>
 
+### Choosing hyperparameter
+- We used `GridSearchCV` with 5 folds to find the optimal hyperparameters. Due to the time efficiency, we run and comment the code for finding the best hyperparameter, and leave the result within the comment.
+- Hyperparameters: We tuned a combination of the max depth, and number of estimators for the Random Forest to find a combination that led a model that generalized the best to unseen data (i.e. performs well on the test set). The optimal hyperparameters we found were a max_depth = 10, n_estimators = 100.
 
 ### Performance
+This tuning demonstrates a higher precision and F1-score on both the training and testing sets compared to the first model. This suggests an improvement in the model's ability to generalize to new data while maintaining strong performance on the training set, because of the additional feature engineering. The model shows consistency in performance across both metrics on the training and testing sets. <br>
+
+Moreover, the examination of the confusion matrix reveals that our model diverges from the tendency of consistently predicting a 5-star rating, unlike the baseline. This is evident in the increased precision, as reflected in the augmented count of diagonal elements. Consequently, our model demonstrates enhanced generalization to unseen data according to our evaluation metrics, aligning with our goal for improvement supported by measurable metrics.<br>
+
+<iframe src="assets/confusion_matrix_final.html" width=900 height=600 frameBorder=0></iframe>
 
 ---
 
