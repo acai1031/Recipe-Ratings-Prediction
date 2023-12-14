@@ -66,8 +66,9 @@ The values within confusion matrix shown below provide a detailed breakdown of t
 
 ## Final Model
 ### Model Choosing 
+After performing multiple experiments, we have opted for the Random Forest Classifier as our chosen model for two primary reasons. Firstly, while the Decision Tree model serves well as a baseline, its performance lacks consistency and stability when compared to alternative models. This inconsistency poses challenges for us in the effective fine-tuning of the final model. Secondly, the Random Forest, being an ensemble model composed of multiple decision trees, provides aggregated predictions that assist in addressing the influence of imbalanced `rating` in our dataset. This characteristic suggests that this classifier is a more favorable choice. Here are the selected features for our model:
 
-### Features
+### Feature Transformations
 
 
 ### Performance
@@ -75,14 +76,23 @@ The values within confusion matrix shown below provide a detailed breakdown of t
 ---
 
 ## Fairness Analysis
-### Permutation Test
-The research question we intend to examine is whether precision is consistent when we predict rating with diverse ingredients and with simple ingredients.<br>
+### Fairness group choice
+The research question we intend to examine is whether precision is consistent when we predict rating with diverse ingredients and with simple ingredients. Do groups with simple ingredient (low ‘n_ingredients’) have better performance in our final prediction model from the ones with diverse ingredient? <br>
 
-**Null Hypothesis (H0)**: ....<br>
-**Alternative Hypothesis (H1)**: ....<br><br>
+### Divided Groups
+The mean of `n_ingredients` is around 9, so we consider `n_ingredients` <= 9 as simple and `n_ingredients` > 9 as diverse.
 
-**Test statistic**: Absolute difference in precision.<br>
+**Null Hypothesis (H0)**: Our model is fair. Its precisions for simple ingredients recipe and diverse ingredients recipe are roughly the same, and any differences are due to random chance.<br>
+**Alternative Hypothesis (H1)**: Our model is unfair. Its precision for simple ingredients recipe is better than its precision for diverse ingredients recipe.<br>
+**Test statistic**: Difference in precision (simple group minus diverse group)<br>
 **Significant level**: 0.05 <br>
+
+
+<iframe src="assets/permutatoin_test.html" width=900 height=600 frameBorder=0></iframe> <br>
+The plot above shows the empirical distribution of our test statistics in 1000 permutations, the red line indicates the observed test statistics.<br>
+
+Based on our test statistics, p-value is **above 0.05**, and this graph, the difference in accuracy across the two groups seems significant.
+Therefore, we **fail to reject** our null hypothesis and claim that simple ingredients recipe and diverse ingredients recipe might have the same precision. Our prediction model is fair on both groups which have the same level of performance
 
 
 
