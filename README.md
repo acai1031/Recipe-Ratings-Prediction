@@ -34,7 +34,9 @@ The choice of metrics reflects our goal to accurately identify recipes that alig
 ### About Data Cleaning
 Our exploratory data analysis on this dataset can be found [here](https://acai1031.github.io/-Recipes-Research-Project/)<br>
 
-Except the data cleaning steps we took above, this time we use a different technique to handle missing value of `rating` and `review`. We notice that if the user neither leave a review nor a rating, then both of them will be filled with np.nan, while if the user leave a review without rating, the rating will be 0. Following this observation, we firstly fill all ratings of 0 with np.nan, then drop all rows that contains np.nan in review or np.nan in ratings, because we believe the missingness of these two variables might due to random chance.<br>
+Except the data cleaning steps we took above, we have two more modification.<br>
+Firstly, we use a different technique to handle missing value of `rating` and `review`. We notice that if the user neither leave a review nor a rating, then both of them will be filled with np.nan, while if the user leave a review without rating, the rating will be 0. Following this observation, we firstly fill all ratings of 0 with np.nan, then drop all rows that contains np.nan in review or np.nan in ratings, because we believe the missingness of these two variables might due to random chance.<br>
+Moreover, in order to better represent the user attitude towards recipe, We transform the `review` into a column `sentiment` labeled with 'negative', 'neutral', and 'positive'. 
 
 ---
 
@@ -88,11 +90,12 @@ The mean of `n_ingredients` is around 9, so we consider `n_ingredients` <= 9 as 
 **Significant level**: 0.05 <br>
 
 
-<iframe src="assets/permutatoin_test.html" width=900 height=600 frameBorder=0></iframe> <br>
+<iframe src="assets/permutation_test.html" width=900 height=600 frameBorder=0></iframe> <br>
 The plot above shows the empirical distribution of our test statistics in 1000 permutations, the red line indicates the observed test statistics.<br>
 
 Based on our test statistics, p-value is **above 0.05**, and this graph, the difference in accuracy across the two groups seems significant.
 Therefore, we **fail to reject** our null hypothesis and claim that simple ingredients recipe and diverse ingredients recipe might have the same precision. Our prediction model is fair on both groups which have the same level of performance
+<br>
 
 
 
